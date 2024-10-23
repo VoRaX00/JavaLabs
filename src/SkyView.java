@@ -12,6 +12,7 @@ public class SkyView {
                 } else {
                     view[i][numCols - j - 1] = scanned[idxScanned];
                 }
+                idxScanned++;
             }
             isLeft = !isLeft;
         }
@@ -26,5 +27,14 @@ public class SkyView {
         }
         int cnt = (endRow - startRow + 1) * (endCol - startCol + 1);
         return result / cnt;
+    }
+
+    public void print() {
+        for (double[] doubles : view) {
+            for (double aDouble : doubles) {
+                System.out.print(aDouble + " ");
+            }
+            System.out.println();
+        }
     }
 }
