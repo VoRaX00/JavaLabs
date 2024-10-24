@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class ArrayTester {
     public static int[] getColumn(int [][]arr2d, int c) {
         int [] result = new int[arr2d[c].length];
@@ -24,15 +26,33 @@ public class ArrayTester {
     }
 
     public static boolean containsDuplicates(int []arr) {
-
+        return false;
     }
 
     public static boolean isLatin(int [][] square) {
-        int [] numbers;
+        int [] numbers = square[0];
+        HashMap<Integer, Set<Integer>> map = new HashMap<>();
         for(int i = 0; i < square.length; i++) {
-            for(int j = 0; j < square[0].length; j++) {
-
+            for(int j = 0; j < square[i].length; j++) {
+                if (!Arrays.asList(Arrays.stream(numbers).boxed().toArray()).contains(square[i][j])) {
+                    return false;
+                } else {
+                    if(map.containsKey(square[i][j])) {
+                        Set<Integer> s = map.get(square[i][j]);
+                        if(s.contains(j)) {
+                            return false;
+                        } else {
+                            s.add(j);
+                            map.put(square[i][j], s);
+                        }
+                    } else {
+                        Set<Integer> set = new HashSet<Integer>();
+                        set.add(square[i][j]);
+                        map.put(square[i][j], set);
+                    }
+                }
             }
         }
+        return true;
     }
 }
