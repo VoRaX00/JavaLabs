@@ -29,8 +29,8 @@ public class Storage<T extends Comparable<T>> {
             throw new StorageExp("Хранилище пусто");
 
         boolean duplicates = true;
-        for(int i = 0; i < storage.length - 1; i++) {
-            if(storage[i] != storage[i+1]){
+        for(int i = 0; i < cap - 1; i++) {
+            if(!storage[i].equals(storage[i+1])) {
                 duplicates = false;
                 break;
             }

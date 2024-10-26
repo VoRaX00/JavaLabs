@@ -3,9 +3,9 @@
 public class Main {
     public static void main(String[] args) {
         Storage<Integer> str = new Storage<>(10);
-        str.Add(3);
         str.Add(1);
-        str.Add(2);
+        str.Add(1);
+        str.Add(1);
 
         str.Remove();
         str.Print();
