@@ -13,15 +13,15 @@ public class ArrayTester {
         if (arr1.length != arr2.length)
             return false;
 
-        for(int i = 0; i < arr1.length; i++) {
+        for (int k : arr1) {
             boolean found = false;
-            for(int j = 0; j < arr2.length; j++) {
-                if(arr1[i] == arr2[j] && i != j) {
+            for (int i : arr2) {
+                if (k == i) {
                     found = true;
                     break;
                 }
             }
-            if(!found) {
+            if (!found) {
                 return false;
             }
         }
@@ -32,12 +32,12 @@ public class ArrayTester {
         HashMap<Integer, Boolean> map = new HashMap<>();
         for (int j : arr) {
             if (map.containsKey(j)) {
-                return false;
+                return true;
             } else {
                 map.put(j, true);
             }
         }
-        return true;
+        return false;
     }
 
     public static boolean isLatin(int [][] square) {
