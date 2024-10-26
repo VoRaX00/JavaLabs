@@ -4,10 +4,10 @@ import java.util.Date;
 public class People implements Serializable {
     private final String _name;
     private final String _surname;
-    private final Date _birthYear;
+    private final int _birthYear;
     private final String _address;
 
-    public People(String name, String surname, Date birthYear, String address) {
+    public People(String name, String surname, int birthYear, String address) {
         _name = name;
         _surname = surname;
         _birthYear = birthYear;
