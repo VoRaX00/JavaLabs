@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class Storage<T extends Comparable<T>> {
-    private final T[] storage;
+    private T[] storage;
     private int cap;
 
     public Storage(int size) {
@@ -39,10 +39,19 @@ public class Storage<T extends Comparable<T>> {
         if(duplicates) {
             throw new StorageExp("Массив состоит полностью из одинаковых элементов");
         }
-        Arrays.sort(storage);
+
+        for(int i = 0; i < cap - 1; i++) {
+            for(int j = i + 1; j < cap; j++) {
+                if(storage[i].compareTo(storage[j]) > 0) {
+                    T temp = storage[i];
+                    storage[i] = storage[j];
+                    storage[j] = temp;
+                }
+            }
+        }
     }
 
-    public void print() {
+    public void Print() {
         for (int i = 0; i < cap; i++) {
             System.out.println(storage[i]);
         }
