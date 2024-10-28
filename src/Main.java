@@ -4,7 +4,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         People people = new People("Nikita", "Kerzhakov", 2004, "Пермь");
-        PeopleToFile.OutputFile(people, "../test.txt");
-        System.out.println(PeopleToFile.ReadFile("../test.txt"));
+        PeopleToFile.OutputFile(people, "test.txt");
+        System.out.println(PeopleToFile.ReadFile("test.txt"));
     }
 }
