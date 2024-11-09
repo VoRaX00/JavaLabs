@@ -1,14 +1,17 @@
 import java.io.*;
 import java.net.Socket;
-import java.security.Provider;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceThread extends Thread {
-    private int clientId;
-    private Socket socketOfServer;
+    private final int clientId;
+    private final Socket current;
+    private final List<Socket> clients;
 
-    public ServiceThread(int clientId, Socket socketOfServer) {
+    public ServiceThread(int clientId, Socket current, List<Socket> clients) {
         this.clientId = clientId;
-        this.socketOfServer = socketOfServer;
+        this.current = current;
+        this.clients = clients;
 
         System.out.println("New connection with clientId: " + clientId);
     }
@@ -16,19 +19,11 @@ public class ServiceThread extends Thread {
     @Override
     public void run() {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
-
+            BufferedReader in = new BufferedReader(new InputStreamReader(current.getInputStream()));
             while (true) {
                 String message = in.readLine();
-                out.write(message);
-                out.newLine();
-                out.flush();
-
-                if (message.equals("BYE")) {
-                    out.write("BYE");
-                    out.newLine();
-                    out.flush();
+                if (!SendMessage(message, in)) {
+                    clients.remove(current);
                     break;
                 }
             }
@@ -38,4 +33,28 @@ public class ServiceThread extends Thread {
         }
     }
 
+    private boolean SendMessage(String message, BufferedReader in) throws IOException {
+        List<BufferedWriter> out = new ArrayList<>();
+        for (Socket socket : clients) {
+            if (socket != current) {
+                out.add(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+            }
+        }
+
+        for (BufferedWriter writer : out) {
+            writer.write("Client #" + clientId + ": "+ message);
+            writer.newLine();
+            writer.flush();
+        }
+
+        if (message.equals("BYE")) {
+            for (BufferedWriter writer : out) {
+                writer.write("BYE");
+                writer.newLine();
+                writer.flush();
+            }
+            return false;
+        }
+        return true;
+    }
 }
