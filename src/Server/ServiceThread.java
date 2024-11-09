@@ -19,40 +19,50 @@ public class ServiceThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(current.getInputStream()));
-            while (true) {
-                String message = in.readLine();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(current.getInputStream()));) {
+            String message;
+            while ((message = in.readLine()) != null) {
                 if (!SendMessage(message, in)) {
-                    clients.remove(current);
                     break;
                 }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                clients.remove(current);
+                current.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
     private boolean SendMessage(String message, BufferedReader in) throws IOException {
-        List<BufferedWriter> out = new ArrayList<>();
-        for (Socket socket : clients) {
-            if (socket != current) {
-                out.add(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+        synchronized (clients) {
+            for (Socket socket : clients) {
+                if (socket != current) {
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                        writer.write("Client.Client #" + clientId + ": " + message);
+                        writer.newLine();
+                        writer.flush();
+                    } catch (IOException e) {
+                        System.out.println("Error sending message to a client: " + e.getMessage());
+                    }
+                }
             }
         }
 
-        for (BufferedWriter writer : out) {
-            writer.write("Client #" + clientId + ": "+ message);
-            writer.newLine();
-            writer.flush();
-        }
-
         if (message.equals("BYE")) {
-            for (BufferedWriter writer : out) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(current.getOutputStream()));
                 writer.write("BYE");
                 writer.newLine();
                 writer.flush();
+            } catch (IOException e) {
+                System.out.println("Error sending BYE message to client #" + clientId + ": " + e.getMessage());
             }
             return false;
         }

@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Server {
@@ -14,7 +16,7 @@ public class Server {
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         clientNumber = 0;
-        clients = new ArrayList<>();
+        clients = Collections.synchronizedList(new ArrayList<>());
     }
 
     public void start() throws IOException {
