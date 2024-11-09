@@ -3,7 +3,7 @@ public class Philosopher extends Thread {
     private final int num;
 
     private int countRice = 0;
-    private PhilosopherTask task = PhilosopherTask.Think;
+//    private PhilosopherTask task = PhilosopherTask.Think;
 
     public Philosopher(Table table, int num) {
         this.table = table;
@@ -29,11 +29,11 @@ public class Philosopher extends Thread {
     }
 
 
-    public PhilosopherTask getTask() {
-        return task;
-    }
-
-    public void setTask(PhilosopherTask task) {
-        this.task = task;
-    }
+//    public PhilosopherTask getTask() {
+//        return task;
+//    }
+//
+//    public void setTask(PhilosopherTask task) {
+//        this.task = task;
+//    }
 }
