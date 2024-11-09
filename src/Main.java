@@ -8,11 +8,15 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         while (true) {
             String[] params = getParams();
-
-            List<People> peoples = PeopleRepo.getPeoples("SELECT * FROM people");
-            System.out.println(peoples);
+            if (params == null) {
+                System.out.println("Параметры введены неверно");
+                break;
+            } else {
+                People people = new People(params[0], params[1], params[2], Integer.parseInt(params[3]));
+                List<People> peoples = PeopleRepo.addPeople(people);
+                System.out.println(peoples);
+            }
         }
-
     }
 
     private static String[] getParams() {
